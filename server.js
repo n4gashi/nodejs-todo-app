@@ -14,7 +14,16 @@ app.get('/', function(req, res) {
 });
 
 app.get('/todos', function(req, res) {
-	res.json(todos);
+	var queryParams = req.query;
+	var filteredTodos = todos;
+
+	if(typeof(req.query.completed) !== 'undefined' && req.query.completed === 'true') {
+		filteredTodos = _.where(filteredTodos, { completed: true });
+	} else if(typeof(req.query.completed) !== 'undefined' && req.query.completed === 'false') {
+		filteredTodos = _.where(filteredTodos, { completed: false });
+	}
+
+	res.json(filteredTodos);
 });
 
 app.get('/todos/:id', function(req, res) {
